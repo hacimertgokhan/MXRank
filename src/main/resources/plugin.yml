@@ -1,0 +1,9 @@
+name: MXRank
+version: '${project.version}'
+main: eu.mixeration.mxrank.MXRank
+prefix: MXRank
+load: STARTUP
+depend: [ Vault ]
+softdepend: [ ASkyBlock, SuperiorSkyblock ]
+authors: [ Mixeration ]
+description: MXRank, Rank up plugin.
