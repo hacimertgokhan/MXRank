@@ -1,12 +1,11 @@
 package eu.mixeration.mxrank.menu.askyblock;
 
-import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
-import com.bgsoftware.superiorskyblock.api.island.Island;
-import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
+import com.wasteofplastic.askyblock.ASkyBlockAPI;
 import eu.mixeration.mxrank.MXRank;
 import eu.mixeration.mxrank.config.MXConfig;
 import eu.mixeration.mxrank.settings.MXValues;
 import eu.mixeration.mxrank.storage.MXStorage;
+import eu.mixeration.mxrank.utils.MXString;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -21,9 +20,6 @@ public class A$MXRankMenu$interact implements Listener {
     public A$MXRankMenu$interact(MXRank plugin) {
     }
 
-    /**
-     * @deprecated
-     */
     @Deprecated
     @EventHandler
     public void drag(InventoryDragEvent event) {
@@ -33,9 +29,6 @@ public class A$MXRankMenu$interact implements Listener {
 
     }
 
-    /**
-     * @deprecated
-     */
     @Deprecated
     @EventHandler
     public void click(InventoryClickEvent event) {
@@ -82,31 +75,29 @@ public class A$MXRankMenu$interact implements Listener {
                     if (!playerBoolean) {
                         event.setCancelled(true);
                         int calculatedPriority = playerPriority + 1;
-                        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
-                        Island island = superiorPlayer.getIsland();
-                        if (!superiorPlayer.hasIsland()) {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.has-not-island")));
+                        if (!ASkyBlockAPI.getInstance().hasIsland(player.getUniqueId())) {
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXString.message("has-not-island")));
                             return;
                         }
 
-                        if (island.getIslandLevel().intValueExact() < neededLevel) {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.not-enough-level").replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValueExact()))));
+                        if (ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId()) < neededLevel) {
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXString.message("not-enough-level").replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId())))));
                             return;
                         }
 
                         if (calculatedPriority != priority) {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.not-next-rank")));
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXString.message("not-next-rank")));
                             return;
                         }
 
                         Iterator var18;
                         String rankup;
                         if (!lastrank) {
-                            var18 = MXConfig.getConfig().getStringList("messages.rank-up").iterator();
+                            var18 = MXConfig.getConfig().getStringList("mx-rank.messages.rank-up").iterator();
 
                             while (var18.hasNext()) {
                                 rankup = (String) var18.next();
-                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValue())).replace("<nextgrouplevel>", String.valueOf(nextLevel));
+                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId()))).replace("<nextgrouplevel>", String.valueOf(nextLevel));
                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
                             }
 
@@ -118,7 +109,7 @@ public class A$MXRankMenu$interact implements Listener {
 
                             while (var18.hasNext()) {
                                 rankup = (String) var18.next();
-                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValue()));
+                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId())));
                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
                             }
 
@@ -128,7 +119,7 @@ public class A$MXRankMenu$interact implements Listener {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("<player>", player.getName()));
                         }
                     } else {
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.finished-all-ranks")));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXString.message("finished-all-ranks")));
                     }
                 }
             }

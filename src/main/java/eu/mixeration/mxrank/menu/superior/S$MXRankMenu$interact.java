@@ -7,6 +7,7 @@ import eu.mixeration.mxrank.MXRank;
 import eu.mixeration.mxrank.config.MXConfig;
 import eu.mixeration.mxrank.settings.MXValues;
 import eu.mixeration.mxrank.storage.MXStorage;
+import eu.mixeration.mxrank.utils.MXString;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -79,24 +80,24 @@ public class S$MXRankMenu$interact implements Listener {
                         SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
                         Island island = superiorPlayer.getIsland();
                         if (!superiorPlayer.hasIsland()) {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.has-not-island")));
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXString.message("has-not-island")));
                             return;
                         }
 
                         if (island.getIslandLevel().intValueExact() < neededLevel) {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.not-enough-level").replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValueExact()))));
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXString.message("not-enough-level").replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValueExact()))));
                             return;
                         }
 
                         if (calculatedPriority != priority) {
-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.not-next-rank")));
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXString.message("not-next-rank")));
                             return;
                         }
 
                         Iterator var18;
                         String rankup;
                         if (!lastrank) {
-                            var18 = MXConfig.getConfig().getStringList("messages.rank-up").iterator();
+                            var18 = MXConfig.getConfig().getStringList("mx-rank.messages.rank-up").iterator();
 
                             while (var18.hasNext()) {
                                 rankup = (String) var18.next();
@@ -122,7 +123,7 @@ public class S$MXRankMenu$interact implements Listener {
                             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("<player>", player.getName()));
                         }
                     } else {
-                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.finished-all-ranks")));
+                        player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXString.message("finished-all-ranks")));
                     }
                 }
             }

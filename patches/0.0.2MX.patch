@@ -1,0 +1,462 @@
+Index: src/main/java/eu/mixeration/mxrank/menu/MXWApi.java
+===================================================================
+diff --git a/src/main/java/eu/mixeration/mxrank/menu/MXWApi.java b/src/main/java/eu/mixeration/mxrank/menu/MXWApi.java
+deleted file mode 100644
+--- a/src/main/java/eu/mixeration/mxrank/menu/MXWApi.java	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
++++ /dev/null	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
+@@ -1,5 +0,0 @@
+-package eu.mixeration.mxrank.menu;
+-
+-public class MXWApi {
+-
+-}
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+--- a/pom.xml	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
++++ b/pom.xml	(date 1659632692006)
+@@ -83,6 +83,13 @@
+             <systemPath>C:/Users/mixer/OneDrive/Belgeler/Apis/superior.jar</systemPath>
+         </dependency>
+         <dependency>
++            <groupId>com.wasteofplastic.askyblock</groupId>
++            <artifactId>ASkyBlock</artifactId>
++            <version>3.0.9.4</version>
++            <scope>system</scope>
++            <systemPath>C:/Users/mixer/OneDrive/Belgeler/Apis/askyblock.jar</systemPath>
++        </dependency>
++        <dependency>
+             <groupId>com.github.MilkBowl</groupId>
+             <artifactId>VaultAPI</artifactId>
+             <version>1.7</version>
+Index: src/main/java/eu/mixeration/mxrank/events/superior/S$IslandReset.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/eu/mixeration/mxrank/events/superior/S$IslandReset.java b/src/main/java/eu/mixeration/mxrank/events/superior/S$IslandReset.java
+new file mode 100644
+--- /dev/null	(date 1659633648801)
++++ b/src/main/java/eu/mixeration/mxrank/events/superior/S$IslandReset.java	(date 1659633648801)
+@@ -0,0 +1,77 @@
++package eu.mixeration.mxrank.events.superior;
++
++import com.bgsoftware.superiorskyblock.api.events.IslandBanEvent;
++import com.bgsoftware.superiorskyblock.api.events.IslandDisbandEvent;
++import com.bgsoftware.superiorskyblock.api.events.IslandKickEvent;
++import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
++import eu.mixeration.mxrank.MXRank;
++import eu.mixeration.mxrank.config.MXConfig;
++import eu.mixeration.mxrank.storage.MXStorage;
++import org.bukkit.Bukkit;
++import org.bukkit.ChatColor;
++import org.bukkit.event.EventHandler;
++import org.bukkit.event.Listener;
++
++import java.util.Iterator;
++
++public class S$IslandReset implements Listener {
++    public S$IslandReset(MXRank mxRank) {
++    }
++
++    @EventHandler
++    public void islandReset(IslandDisbandEvent disband) {
++        if (!disband.getPlayer().asPlayer().hasPermission("mxrank.cancelreset")) {
++            SuperiorPlayer player = disband.getPlayer();
++            String commands = MXConfig.getConfig().getString("mx-rank.reset-command");
++            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands.replace("<player>", player.getName()));
++            MXStorage.getConfig().set("user-data." + player.getUniqueId() + ".priority", 0);
++            MXStorage.getConfig().set("user-data." + player.getUniqueId() + ".finished-all-ranks", "false");
++            MXStorage.saveConfig();
++            Iterator var4 = MXConfig.getConfig().getStringList("messages.rank-reseted").iterator();
++
++            while (var4.hasNext()) {
++                String rankup = (String) var4.next();
++                disband.getPlayer().asPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
++            }
++        }
++
++    }
++
++    @EventHandler
++    public void islandKick(IslandKickEvent disband) {
++        if (!disband.getTarget().asPlayer().hasPermission("mxrank.cancelreset")) {
++            SuperiorPlayer player = disband.getTarget();
++            String commands = MXConfig.getConfig().getString("mx-rank.reset-command");
++            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands.replace("<player>", player.getName()));
++            MXStorage.getConfig().set("user-data." + player.getUniqueId() + ".priority", 0);
++            MXStorage.getConfig().set("user-data." + player.getUniqueId() + ".finished-all-ranks", "false");
++            MXStorage.saveConfig();
++            Iterator var4 = MXConfig.getConfig().getStringList("messages.rank-reseted").iterator();
++
++            while (var4.hasNext()) {
++                String rankup = (String) var4.next();
++                disband.getPlayer().asPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
++            }
++        }
++
++    }
++
++    @EventHandler
++    public void islandBan(IslandBanEvent disband) {
++        if (!disband.getTarget().asPlayer().hasPermission("mxrank.cancelreset")) {
++            SuperiorPlayer target = disband.getTarget();
++            String commands = MXConfig.getConfig().getString("mx-rank.reset-command");
++            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands.replace("<player>", target.getName()));
++            MXStorage.getConfig().set("user-data." + target.getUniqueId() + ".priority", 0);
++            MXStorage.getConfig().set("user-data." + target.getUniqueId() + ".finished-all-ranks", "false");
++            MXStorage.saveConfig();
++            Iterator var4 = MXConfig.getConfig().getStringList("messages.rank-reseted").iterator();
++
++            while (var4.hasNext()) {
++                String rankup = (String) var4.next();
++                disband.getPlayer().asPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
++            }
++        }
++
++    }
++}
+Index: src/main/resources/config.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/resources/config.yml b/src/main/resources/config.yml
+--- a/src/main/resources/config.yml	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
++++ b/src/main/resources/config.yml	(date 1659633269331)
+@@ -1,5 +1,6 @@
+ mx-rank:
+   default-rank: default
++  reset-command: 'say Hello !'
+   menu:
+     title: '&8RankUP Menu'
+   player-ranks:
+Index: src/main/java/eu/mixeration/mxrank/events/askyblock/A$IslandReset.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/eu/mixeration/mxrank/events/askyblock/A$IslandReset.java b/src/main/java/eu/mixeration/mxrank/events/askyblock/A$IslandReset.java
+new file mode 100644
+--- /dev/null	(date 1659633648811)
++++ b/src/main/java/eu/mixeration/mxrank/events/askyblock/A$IslandReset.java	(date 1659633648811)
+@@ -0,0 +1,56 @@
++package eu.mixeration.mxrank.events.askyblock;
++
++import com.wasteofplastic.askyblock.events.IslandDeleteEvent;
++import com.wasteofplastic.askyblock.events.IslandResetEvent;
++import eu.mixeration.mxrank.MXRank;
++import eu.mixeration.mxrank.config.MXConfig;
++import eu.mixeration.mxrank.storage.MXStorage;
++import org.bukkit.Bukkit;
++import org.bukkit.ChatColor;
++import org.bukkit.entity.Player;
++import org.bukkit.event.EventHandler;
++import org.bukkit.event.Listener;
++
++import java.util.Iterator;
++
++public class A$IslandReset implements Listener {
++    public A$IslandReset(MXRank mxRank) {
++    }
++
++    @EventHandler
++    public void askyblockIslandReset(IslandResetEvent event) {
++        if (!event.getPlayer().hasPermission("mxrank.cancelreset")) {
++            Player player = event.getPlayer();
++            String commands = MXConfig.getConfig().getString("mx-rank.reset-command");
++            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands.replace("<player>", player.getName()));
++            MXStorage.getConfig().set("user-data." + player.getUniqueId() + ".priority", 0);
++            MXStorage.getConfig().set("user-data." + player.getUniqueId() + ".finished-all-ranks", "false");
++            MXStorage.saveConfig();
++            Iterator var4 = MXConfig.getConfig().getStringList("messages.rank-reseted").iterator();
++
++            while (var4.hasNext()) {
++                String rankup = (String) var4.next();
++                event.getPlayer().sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
++            }
++        }
++    }
++
++    @EventHandler
++    public void askyblockIslandBan(IslandDeleteEvent event) {
++        Player player = Bukkit.getPlayer(event.getPlayerUUID());
++        if (!player.hasPermission("mxrank.cancelreset")) {
++            String commands = MXConfig.getConfig().getString("mx-rank.reset-command");
++            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commands.replace("<player>", player.getName()));
++            MXStorage.getConfig().set("user-data." + player.getUniqueId() + ".priority", 0);
++            MXStorage.getConfig().set("user-data." + player.getUniqueId() + ".finished-all-ranks", "false");
++            MXStorage.saveConfig();
++            Iterator var4 = MXConfig.getConfig().getStringList("messages.rank-reseted").iterator();
++
++            while (var4.hasNext()) {
++                String rankup = (String) var4.next();
++                player.sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
++            }
++        }
++    }
++
++}
+Index: patches/0.0.1MX.patch
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>windows-1254
+===================================================================
+diff --git a/patches/0.0.1MX.patch b/patches/0.0.1MX.patch
+new file mode 100644
+--- /dev/null	(date 1659632963248)
++++ b/patches/0.0.1MX.patch	(date 1659632963248)
+@@ -0,0 +1,136 @@
++Index: src/main/java/eu/mixeration/mxrank/menu/MXWApi.java
++===================================================================
++diff --git a/src/main/java/eu/mixeration/mxrank/menu/MXWApi.java b/src/main/java/eu/mixeration/mxrank/menu/MXWApi.java
++deleted file mode 100644
++--- a/src/main/java/eu/mixeration/mxrank/menu/MXWApi.java	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
+++++ /dev/null	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
++@@ -1,5 +0,0 @@
++-package eu.mixeration.mxrank.menu;
++-
++-public class MXWApi {
++-
++-}
++Index: pom.xml
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/pom.xml b/pom.xml
++--- a/pom.xml	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
+++++ b/pom.xml	(date 1659632692006)
++@@ -83,6 +83,13 @@
++             <systemPath>C:/Users/mixer/OneDrive/Belgeler/Apis/superior.jar</systemPath>
++         </dependency>
++         <dependency>
+++            <groupId>com.wasteofplastic.askyblock</groupId>
+++            <artifactId>ASkyBlock</artifactId>
+++            <version>3.0.9.4</version>
+++            <scope>system</scope>
+++            <systemPath>C:/Users/mixer/OneDrive/Belgeler/Apis/askyblock.jar</systemPath>
+++        </dependency>
+++        <dependency>
++             <groupId>com.github.MilkBowl</groupId>
++             <artifactId>VaultAPI</artifactId>
++             <version>1.7</version>
++Index: src/main/java/eu/mixeration/mxrank/MXRank.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/java/eu/mixeration/mxrank/MXRank.java b/src/main/java/eu/mixeration/mxrank/MXRank.java
++--- a/src/main/java/eu/mixeration/mxrank/MXRank.java	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
+++++ b/src/main/java/eu/mixeration/mxrank/MXRank.java	(date 1659632795755)
++@@ -8,6 +8,7 @@
++ import eu.mixeration.mxrank.commands.MXAdminisitrator;
++ import eu.mixeration.mxrank.config.MXConfig;
++ import eu.mixeration.mxrank.events.MXJoin;
+++import eu.mixeration.mxrank.menu.askyblock.A$MXRankMenu$interact;
++ import eu.mixeration.mxrank.menu.superior.S$MXRankMenu$interact;
++ import eu.mixeration.mxrank.settings.MXApi;
++ import eu.mixeration.mxrank.storage.MXStorage;
++@@ -31,8 +32,8 @@
++     public void whichApiWillUse() {
++         if (getAPI().equalsIgnoreCase("SuperiorSkyBlock")) {
++             Bukkit.getPluginManager().registerEvents(new S$MXRankMenu$interact(this), this);
++-        } else if (getAPI().equalsIgnoreCase("SuperiorSkyBlock")) {
++-            Bukkit.getPluginManager().registerEvents(new S$MXRankMenu$interact(this), this);
+++        } else if (getAPI().equalsIgnoreCase("ASkyBlock")) {
+++            Bukkit.getPluginManager().registerEvents(new A$MXRankMenu$interact(this), this);
++         }
++     }
++ 
++Index: src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java
++IDEA additional info:
++Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
++<+>UTF-8
++===================================================================
++diff --git a/src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java b/src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java
++--- a/src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
+++++ b/src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java	(date 1659632962815)
++@@ -1,8 +1,6 @@
++ package eu.mixeration.mxrank.menu.askyblock;
++ 
++-import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
++-import com.bgsoftware.superiorskyblock.api.island.Island;
++-import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
+++import com.wasteofplastic.askyblock.ASkyBlockAPI;
++ import eu.mixeration.mxrank.MXRank;
++ import eu.mixeration.mxrank.config.MXConfig;
++ import eu.mixeration.mxrank.settings.MXValues;
++@@ -21,9 +19,6 @@
++     public A$MXRankMenu$interact(MXRank plugin) {
++     }
++ 
++-    /**
++-     * @deprecated
++-     */
++     @Deprecated
++     @EventHandler
++     public void drag(InventoryDragEvent event) {
++@@ -33,9 +28,6 @@
++ 
++     }
++ 
++-    /**
++-     * @deprecated
++-     */
++     @Deprecated
++     @EventHandler
++     public void click(InventoryClickEvent event) {
++@@ -82,15 +74,13 @@
++                     if (!playerBoolean) {
++                         event.setCancelled(true);
++                         int calculatedPriority = playerPriority + 1;
++-                        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
++-                        Island island = superiorPlayer.getIsland();
++-                        if (!superiorPlayer.hasIsland()) {
+++                        if (!ASkyBlockAPI.getInstance().hasIsland(player.getUniqueId())) {
++                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.has-not-island")));
++                             return;
++                         }
++ 
++-                        if (island.getIslandLevel().intValueExact() < neededLevel) {
++-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.not-enough-level").replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValueExact()))));
+++                        if (ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId()) < neededLevel) {
+++                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.not-enough-level").replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId())))));
++                             return;
++                         }
++ 
++@@ -106,7 +96,7 @@
++ 
++                             while (var18.hasNext()) {
++                                 rankup = (String) var18.next();
++-                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValue())).replace("<nextgrouplevel>", String.valueOf(nextLevel));
+++                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId()))).replace("<nextgrouplevel>", String.valueOf(nextLevel));
++                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
++                             }
++ 
++@@ -118,7 +108,7 @@
++ 
++                             while (var18.hasNext()) {
++                                 rankup = (String) var18.next();
++-                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValue()));
+++                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId())));
++                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
++                             }
++ 
+Index: src/main/java/eu/mixeration/mxrank/MXRank.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/eu/mixeration/mxrank/MXRank.java b/src/main/java/eu/mixeration/mxrank/MXRank.java
+--- a/src/main/java/eu/mixeration/mxrank/MXRank.java	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
++++ b/src/main/java/eu/mixeration/mxrank/MXRank.java	(date 1659633648479)
+@@ -8,6 +8,9 @@
+ import eu.mixeration.mxrank.commands.MXAdminisitrator;
+ import eu.mixeration.mxrank.config.MXConfig;
+ import eu.mixeration.mxrank.events.MXJoin;
++import eu.mixeration.mxrank.events.askyblock.A$IslandReset;
++import eu.mixeration.mxrank.events.superior.S$IslandReset;
++import eu.mixeration.mxrank.menu.askyblock.A$MXRankMenu$interact;
+ import eu.mixeration.mxrank.menu.superior.S$MXRankMenu$interact;
+ import eu.mixeration.mxrank.settings.MXApi;
+ import eu.mixeration.mxrank.storage.MXStorage;
+@@ -31,8 +34,10 @@
+     public void whichApiWillUse() {
+         if (getAPI().equalsIgnoreCase("SuperiorSkyBlock")) {
+             Bukkit.getPluginManager().registerEvents(new S$MXRankMenu$interact(this), this);
+-        } else if (getAPI().equalsIgnoreCase("SuperiorSkyBlock")) {
+-            Bukkit.getPluginManager().registerEvents(new S$MXRankMenu$interact(this), this);
++            Bukkit.getPluginManager().registerEvents(new S$IslandReset(this), this);
++        } else if (getAPI().equalsIgnoreCase("ASkyBlock")) {
++            Bukkit.getPluginManager().registerEvents(new A$IslandReset(this), this);
++            Bukkit.getPluginManager().registerEvents(new A$MXRankMenu$interact(this), this);
+         }
+     }
+ 
+@@ -48,6 +53,7 @@
+             MXVault.setupPermissions();
+             mx$logger.info(String.format("[%s] Selected rank-up API: (%s)", this.getDescription().getName(), MXApi.getAPI()));
+             this.getCommand("MXRank").setExecutor(new MXAdminisitrator(this));
++            whichApiWillUse();
+         }
+     }
+ }
+Index: src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java b/src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java
+--- a/src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java	(revision 9cb054699059fbb1a52fd847991120f07b75a667)
++++ b/src/main/java/eu/mixeration/mxrank/menu/askyblock/A$MXRankMenu$interact.java	(date 1659632962815)
+@@ -1,8 +1,6 @@
+ package eu.mixeration.mxrank.menu.askyblock;
+ 
+-import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
+-import com.bgsoftware.superiorskyblock.api.island.Island;
+-import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
++import com.wasteofplastic.askyblock.ASkyBlockAPI;
+ import eu.mixeration.mxrank.MXRank;
+ import eu.mixeration.mxrank.config.MXConfig;
+ import eu.mixeration.mxrank.settings.MXValues;
+@@ -21,9 +19,6 @@
+     public A$MXRankMenu$interact(MXRank plugin) {
+     }
+ 
+-    /**
+-     * @deprecated
+-     */
+     @Deprecated
+     @EventHandler
+     public void drag(InventoryDragEvent event) {
+@@ -33,9 +28,6 @@
+ 
+     }
+ 
+-    /**
+-     * @deprecated
+-     */
+     @Deprecated
+     @EventHandler
+     public void click(InventoryClickEvent event) {
+@@ -82,15 +74,13 @@
+                     if (!playerBoolean) {
+                         event.setCancelled(true);
+                         int calculatedPriority = playerPriority + 1;
+-                        SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
+-                        Island island = superiorPlayer.getIsland();
+-                        if (!superiorPlayer.hasIsland()) {
++                        if (!ASkyBlockAPI.getInstance().hasIsland(player.getUniqueId())) {
+                             player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.has-not-island")));
+                             return;
+                         }
+ 
+-                        if (island.getIslandLevel().intValueExact() < neededLevel) {
+-                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.not-enough-level").replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValueExact()))));
++                        if (ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId()) < neededLevel) {
++                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', MXConfig.getConfig().getString("messages.not-enough-level").replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId())))));
+                             return;
+                         }
+ 
+@@ -106,7 +96,7 @@
+ 
+                             while (var18.hasNext()) {
+                                 rankup = (String) var18.next();
+-                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValue())).replace("<nextgrouplevel>", String.valueOf(nextLevel));
++                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId()))).replace("<nextgrouplevel>", String.valueOf(nextLevel));
+                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
+                             }
+ 
+@@ -118,7 +108,7 @@
+ 
+                             while (var18.hasNext()) {
+                                 rankup = (String) var18.next();
+-                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(SuperiorSkyblockAPI.getPlayer(player).getIsland().getIslandLevel().intValue()));
++                                rankup = rankup.replace("<next>", next_groupname).replace("<new>", groupname).replace("<level>", String.valueOf(neededLevel)).replace("<your>", String.valueOf(ASkyBlockAPI.getInstance().getIslandLevel(player.getUniqueId())));
+                                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', rankup));
+                             }
+ 

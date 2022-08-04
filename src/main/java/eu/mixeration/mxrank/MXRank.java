@@ -8,6 +8,9 @@ package eu.mixeration.mxrank;
 import eu.mixeration.mxrank.commands.MXAdminisitrator;
 import eu.mixeration.mxrank.config.MXConfig;
 import eu.mixeration.mxrank.events.MXJoin;
+import eu.mixeration.mxrank.events.askyblock.A$IslandReset;
+import eu.mixeration.mxrank.events.superior.S$IslandReset;
+import eu.mixeration.mxrank.menu.askyblock.A$MXRankMenu$interact;
 import eu.mixeration.mxrank.menu.superior.S$MXRankMenu$interact;
 import eu.mixeration.mxrank.settings.MXApi;
 import eu.mixeration.mxrank.storage.MXStorage;
@@ -31,16 +34,18 @@ public final class MXRank extends JavaPlugin {
     public void whichApiWillUse() {
         if (getAPI().equalsIgnoreCase("SuperiorSkyBlock")) {
             Bukkit.getPluginManager().registerEvents(new S$MXRankMenu$interact(this), this);
-        } else if (getAPI().equalsIgnoreCase("SuperiorSkyBlock")) {
-            Bukkit.getPluginManager().registerEvents(new S$MXRankMenu$interact(this), this);
+            Bukkit.getPluginManager().registerEvents(new S$IslandReset(this), this);
+        } else if (getAPI().equalsIgnoreCase("ASkyBlock")) {
+            Bukkit.getPluginManager().registerEvents(new A$IslandReset(this), this);
+            Bukkit.getPluginManager().registerEvents(new A$MXRankMenu$interact(this), this);
         }
     }
 
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new MXJoin(this), this);
         MXLoad.loadAPI();
-        MXStorage.create();
         MXConfig.create();
+        MXStorage.create();
         if (!MXVault.setupEconomy()) {
             MXVault.log.severe(String.format("[%s] - Disabled due to no Vault dependency found!", this.getDescription().getName()));
             this.getServer().getPluginManager().disablePlugin(this);
@@ -48,6 +53,7 @@ public final class MXRank extends JavaPlugin {
             MXVault.setupPermissions();
             mx$logger.info(String.format("[%s] Selected rank-up API: (%s)", this.getDescription().getName(), MXApi.getAPI()));
             this.getCommand("MXRank").setExecutor(new MXAdminisitrator(this));
+            whichApiWillUse();
         }
     }
 }

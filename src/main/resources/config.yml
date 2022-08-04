@@ -1,5 +1,6 @@
 mx-rank:
   default-rank: default
+  reset-command: 'say Hello !'
   menu:
     title: '&8RankUP Menu'
   player-ranks:
@@ -44,14 +45,23 @@ mx-rank:
       display: "&6King"
   messages:
     prefix: '&6MXRank &8⊱&r'
-    help:
-      - ''
-      - '&9&lMXRank &8| &fHelp messages'
-      - '   &f/MxRank Reload'
-      - ''
     only-in-game: '<prefix> &7You cannot do that...'
     no-permission: '<prefix> &7You dont have a enough permission.'
     reloaded: '<prefix> &7Plugin reloaded'
+    not-integer: '&7Must be a number.'
+    rank-reseted: '&7Your rank reseted.'
+    finished-all-ranks: "<prefix> You already complated all ranks !"
+    not-next-rank: "<prefix> Your next rank is not that rank !"
+    not-enough-level: "<prefix> Not enough level (&c<your>/<level>&7) !"
+    has-not-island: "<prefix> You dont have a island."
+    priority-changed: '&7Your priority just changed.'
+    about-player:
+      - ""
+      - "&6<player>&e:"
+      - "   &fIs player finished all ranks ? &e<isPlayerFinishAllRanks>"
+      - "   &fRank: &e<rank>"
+      - "   &fPriority: &e<priority>"
+      - ""
     last-rank:
       - ""
       - "&6&lRANK UP !"
@@ -64,7 +74,10 @@ mx-rank:
       - "   &eYour new rank: &c<new>"
       - "   &eYour next rank &c<next>, &eneeded level: &c<nextgrouplevel>"
       - ""
-    finished-all-ranks: "<prefix> You already complated all ranks !"
-    not-next-rank: "<prefix> Your next rank is not that rank !"
-    not-enough-level: "<prefix> Not enough level (&c<your>/<level>&7) !"
-    has-not-island: "<prefix> You dont have a island."
+    help:
+      - ''
+      - '&9&lMXRank &8| &fHelp messages'
+      - '   &f/MxRank Reload'
+      - '   &f/MxRank setpriority <player> <priority>'
+      - '   &f/MxRank reset <player>'
+      - ''
