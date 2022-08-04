@@ -7,3 +7,7 @@ depend: [ Vault ]
 softdepend: [ ASkyBlock, SuperiorSkyblock ]
 authors: [ Mixeration ]
 description: MXRank, Rank up plugin.
+
+commands:
+  MxRank:
+    description: MxRank main command.

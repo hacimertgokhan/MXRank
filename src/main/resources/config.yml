@@ -1,0 +1,70 @@
+mx-rank:
+  default-rank: default
+  menu:
+    title: '&8RankUP Menu'
+  player-ranks:
+    Villager:
+      level: 100
+      group-name: Villager
+      next-group-name: Lord
+      run-command: gamemode 0 <player>
+      priority: 1
+      last-rank: false
+      material: COAL
+      slot: 0
+      lore:
+        - "&f"
+        - "&7Needed level: &b100"
+      display: "&aVillager"
+    Lord:
+      level: 200
+      group-name: Lord
+      next-group-name: King
+      run-command: gamemode 1 <player>
+      priority: 2
+      last-rank: false
+      material: GOLD_INGOT
+      slot: 1
+      lore:
+        - "&f"
+        - "&7Needed level: &b200"
+      display: "&eLord"
+    King:
+      level: 300
+      group-name: King
+      next-group-name: King
+      run-command: gamemode 2 <player>
+      priority: 3
+      last-rank: true
+      material: DIAMOND
+      slot: 2
+      lore:
+        - "&f"
+        - "&7Needed level: &b300"
+      display: "&6King"
+  messages:
+    prefix: '&6MXRank &8⊱&r'
+    help:
+      - ''
+      - '&9&lMXRank &8| &fHelp messages'
+      - '   &f/MxRank Reload'
+      - ''
+    only-in-game: '<prefix> &7You cannot do that...'
+    no-permission: '<prefix> &7You dont have a enough permission.'
+    reloaded: '<prefix> &7Plugin reloaded'
+    last-rank:
+      - ""
+      - "&6&lRANK UP !"
+      - "   &eYour new rank: &c<new>"
+      - "   &eYou finished all ranks !"
+      - ""
+    rank-up:
+      - ""
+      - "&6&lRANK UP !"
+      - "   &eYour new rank: &c<new>"
+      - "   &eYour next rank &c<next>, &eneeded level: &c<nextgrouplevel>"
+      - ""
+    finished-all-ranks: "<prefix> You already complated all ranks !"
+    not-next-rank: "<prefix> Your next rank is not that rank !"
+    not-enough-level: "<prefix> Not enough level (&c<your>/<level>&7) !"
+    has-not-island: "<prefix> You dont have a island."
