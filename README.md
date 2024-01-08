@@ -3,7 +3,7 @@
 
 ## Authors
 
-- [@mixeration](https://www.github.com/mixeration)
+- [@hacimertgokhan](https://www.github.com/hacimertgokhan)
 
 
 ## Features
@@ -20,7 +20,7 @@
 Clone the project
 
 ```bash
-  git clone https://github.com/mixeration/MXRank.git
+  git clone https://github.com/hacimertgokhan/MXRank.git
 ```
 
 Go to the project directory
